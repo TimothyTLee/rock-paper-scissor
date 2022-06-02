@@ -10,7 +10,7 @@ const scissors_div = document.getElementById("s");
 
 function getComputerChoice() {
     const options = ['r', 'p', 's'];
-    const randomNumber = Math.floor(Math.random() *3);
+    let randomNumber = Math.floor(Math.random() *3);
     return options [randomNumber];
 }
 
@@ -19,52 +19,49 @@ function convertToWord(letter){
     if (letter === "p") return "Paper";
     return "scissors";
 }
-function win(userChoice, computerChoice){
-    userScore++;
-    userScore_span.innerHTML = userScore;
-    computerScore_span.innerHTML = computerScore;
-    const smallUserWord ="user".font-size(3).sub();
-    const smallComputerWord = "computer".font-size(3).sub();
-    result_p.innerHTML = `${convertToWord(userChoice)}${smallUserWord} "beats" ${convertToWord(computerChoice)}${SmallComputerWord}."Winner!"`;
+function completeRound(userChoice, computerChoice, results){
+    
+    let result_p = document.querySelector('.result p');
+    
+    switch(results){
+        case 'win': 
+            userScore++;
+            userScore_span.innerHTML = userScore;
+            result_p.innerHTML = `User's ${convertToWord(userChoice)} beats Computer's ${convertToWord(computerChoice)}. You win!`
+            break;
+        case 'lost':
+            computerScore++;
+            computerScore_span.innerHTML = userScore;
+            result_p.innerHTML = `User's ${convertToWord(userChoice)} loses to Computer's ${convertToWord(computerChoice)}. you lost.`
+            break;
+        case 'draw':
+            result_p.innerHTML = `User's ${convertToWord(userChoice)} draws to Computer's ${convertToWord(computerChoice)}. try again!`
+            break;
+    
+    }   
 
 }
-function lose(userChoice, computerChoice){
-    computerScore++;
-    userScore_span.innerHTML = userScore;
-    computerScore_span.innerHTML = computerScore;
-    const smallUserWord ="user".font-size(3).sub();
-    const smallComputerWord = "computer".font-size(3).sub();
-    result_p.innerHTML = `${convertToWord(userChoice)}${smallUserWord} "loses" ${convertToWord(computerChoice)}${SmallComputerWord}."Lost!"`;
-}
-
-function draw(userChoice, computerChoice){
-    userScore_span.innerHTML = userScore;
-    const smallUserWord ="user".font-size(3).sub();
-    const smallComputerWord = "computer".font-size(3).sub();
-    result_p.innerHTML = `${convertToWord(userChoice)}${smallUserWord} "equals" ${convertToWord(computerChoice)}${SmallComputerWord}."Draw. Try again!"`;
-}
-
 
 function game(userChoice) {
-    const computerChoice = getComputerChoice();
+    let computerChoice = getComputerChoice();
     switch (userChoice + computerChoice){
 
         case"rs":
         case "pr":
         case "sp":
-            win(userChoice,computerChoice);
+            completeRound(userChoice,computerChoice,'win');
             break;
 
         case "rp":
         case "ps":
         case "sr":
-            lose(userChoice, computerChoice);
+            completeRound(userChoice, computerChoice,'lost');
             break;
 
         case "rr":
         case "pp":
         case "ss":
-            draw(userChoice, computerChoice);
+            completeRound(userChoice, computerChoice,'draw');
             break;
     }
 
@@ -74,14 +71,18 @@ function main(){
 
     rock_div.addEventListener('click', function(){
     console.log("You clicked on Rock");
+    game('r');
     })
 
     paper_div.addEventListener('click', function(){
     console.log("You clicked on Paper");
+    game('p');
     })
 
     scissors_div.addEventListener('click', function(){
     console.log("You clicked on Scissors");
+    game('s');
+
     })
 }
 
